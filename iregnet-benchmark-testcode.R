@@ -39,7 +39,7 @@ benchmark.iregnet <- function(update.number, row.number, col.number, dist, censo
   #use microbenchmark to test runtime
   time.result <- microbenchmark(oldiregnet(xy$x, xy$surv, dist, alpha = 1, intercept = T, thresh=1e-7, standardize=T),
                                 iregnet(xy$x, xy$surv, dist, alpha = 1, intercept = T, thresh=1e-7, standardize=T),
-                                times=1L)
+                                times=3L)
   
   #split the time result by expr
   res <- data.table(time.result)[, list(min=min(time), mean=mean(time), max=max(time)), by=list(expr)][order(expr)]
