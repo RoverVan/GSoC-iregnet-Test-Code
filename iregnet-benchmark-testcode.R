@@ -6,6 +6,42 @@ library(microbenchmark)
 library(ggplot2)
 library(data.table)
 
+#We set the seed into 100
+seed_test = 100
+set.seed(seed_test)
+
+#Set the rowname of the benchmark table
+row.type <- "martix.row.length"
+col.type <- "martix.col.length"
+
+#Set the constant number for testing in row or col
+constant.col.number <- 10
+constant.row.number <- 5000
+
+#Set the update number for testing in row or col
+update.row.length <- seq(100, 10000, by=500)
+update.col.length <- seq(100, 4000, by=1000)
+
+
+##Main process
+
+dists <- c("gaussian", "logistic")
+censoring.types <- c("none", "right", "left", "interval")
+
+for(dist in dists){
+  
+  dist <- "logistic";
+  for(censoring.type in censoring.types){
+    
+    #This is for testing in row
+    benchmark.main(row.type, update.row.length, dist, censoring.type)  
+    
+    #This is for testing in col
+    benchmark.main(col.type, update.col.length, dist, censoring.type)
+  }
+}
+
+
 #The main benchmark function of iregnet
 benchmark.main<- function(type, update.length, dist, censoring.type){
   
@@ -96,37 +132,3 @@ benchmark.plot <- function(opt.res, test.type, dist, censoring.type){
   ggsave(paste(dist, test.type, censoring.type, ".png"), path = "/Users/Rover/Desktop/", width = 9.35, height = 6.32)
 }
 
-#We set the seed into 100
-seed_test = 100
-set.seed(seed_test)
-
-#Set the rowname of the benchmark table
-row.type <- "martix.row.length"
-col.type <- "martix.col.length"
-
-#Set the constant number for testing in row or col
-constant.col.number <- 10
-constant.row.number <- 5000
-
-#Set the update number for testing in row or col
-update.row.length <- seq(100, 10000, by=500)
-update.col.length <- seq(100, 4000, by=1000)
-
-################################ Gaussian - None #####################################
-
-
-dists <- c("gaussian", "logistic")
-censoring.types <- c("none", "right", "left", "interval")
-
-for(dist in dists){
-  
-  dist <- "logistic";
-  for(censoring.type in censoring.types){
-    
-    #This is for testing in row
-    benchmark.main(row.type, update.row.length, dist, censoring.type)  
-    
-    #This is for testing in col
-    benchmark.main(col.type, update.col.length, dist, censoring.type)
-  }
-}
